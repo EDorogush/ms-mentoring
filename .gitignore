@@ -1,0 +1,11 @@
+/*.idea
+build
+out
+*.iml
+*.log
+/logs
+/.gradle
+/postgres
+target
+*.java-version
+/node_modules

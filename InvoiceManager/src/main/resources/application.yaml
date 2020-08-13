@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    hikari:
+      driver-class-name: org.postgresql.Driver
+      maximum-pool-size: 10
+      connection-timeout: 5000
+    url: jdbc:postgresql://localhost:5432/invoicedb?charSet=UNICODE
+    username: invoicedbuser
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc.lob.non_contextual_creation: true
+  mvc:
+    locale: en
+
+
