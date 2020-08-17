@@ -16,31 +16,31 @@ initdb --locale=C -E UTF-8 postgres
 postgres -D postgres
 ```
 
-### Create database with name invoicedb:
+### Create database with name gamedb:
 ```
-psql -d postgres -c 'create database invoicedb'
+psql -d postgres -c 'create database gamedb'
 ```
- ### Create user with name shoppingcartuser:
+ ### Create user with name gameuser:
 ```
-psql -d postgres  -c 'create user invoicedbuser'
+psql -d postgres  -c 'create user gamedbuser'
 ```
-### Grant privileges to invoicedbuser:
+### Grant privileges to gamedbuser:
 ```
-psql -d postgres -c 'grant all privileges on database invoicedb to invoicedbuser'
+psql -d postgres -c 'grant all privileges on database gamedb to gamedbuser'
 ```
 ## IMPORTANT: When work from Windows OS use " instead of ' .
 
-### Create application schemas on invoicedb
+### Create application schemas on gamedb
 ```
-psql -d invoicedb -U invoicedbuser -f src/main/resources/dbscripts/schema.sql
+psql -d gamedb -U gamedbuser -f src/main/resources/dbscripts/schema.sql
 ```
 ### Insert dbInitData
 ```
-psql -d invoicedb -U invoicedbuser -f src/main/resources/dbscripts/dbInitData.sql
+psql -d gamedb -U gamedbuser -f src/main/resources/dbscripts/dbInitData.sql
 ```
 #### You may also need following commands:
 ```
-psql -d invoicedb -U invoicedbuser -c 'select * from invoices'
+psql -d gamedb -U gamedbuser -c 'select * from games'
 ```
 ##### Start db in background:
 ```

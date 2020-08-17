@@ -1,11 +1,13 @@
-package com.home.ms.product.purchasehistory;
+package com.home.ms.product.purchasehistory.web;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 public class PurchaseHistoryItem {
     private String id;
     private String gameId;
-    private Instant purchaseTime;
+    private Instant date;
+    private BigDecimal cost;
 
     public String getId() {
         return id;
@@ -23,11 +25,19 @@ public class PurchaseHistoryItem {
         this.gameId = gameId;
     }
 
-    public Instant getPurchaseTime() {
-        return purchaseTime;
+    public Instant getDate() {
+        return date;
     }
 
-    public void setPurchaseTime(Instant purchaseTime) {
-        this.purchaseTime = purchaseTime;
+    public void setDate(Instant date) {
+        this.date = date;
+    }
+
+    public BigDecimal getCost() {
+        return cost;
+    }
+
+    public void setCost(BigDecimal cost) {
+        this.cost = cost;
     }
 }

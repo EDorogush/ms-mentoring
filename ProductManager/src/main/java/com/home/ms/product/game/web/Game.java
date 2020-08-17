@@ -7,7 +7,6 @@ public class Game {
     private String title;
     private BigDecimal basePrice;
 
-
     public String getId() {
         return id;
     }
@@ -31,6 +30,5 @@ public class Game {
     public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
-
 
 }

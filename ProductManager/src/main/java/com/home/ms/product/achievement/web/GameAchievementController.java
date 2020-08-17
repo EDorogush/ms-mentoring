@@ -1,34 +1,41 @@
 package com.home.ms.product.achievement.web;
 
 
-import com.home.ms.product.game.web.GameGetRequestParameters;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.lang.Nullable;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/games/{gameId}/achievement")
+@RequestMapping("/games/{gameId}/achievements")
 public class GameAchievementController {
 
     @GetMapping
-    public List<Achievement> getUserAchievement(@PathVariable String gameId, GameGetRequestParameters param) {
+    public List<AchievementItem> getUserAchievement(@PathVariable String gameId, @RequestParam @Nullable String userId) {
         return new ArrayList<>();
+    }
+
+    @PostMapping
+    public AchievementItem addAchievementForUser(@PathVariable String gameId, @RequestParam @Nullable String userIdm,
+                                                 @RequestBody AchievementItem item) {
+        return new AchievementItem();
+    }
+
+    @DeleteMapping
+    public void deleteAllUserAchievements(@PathVariable String gameId, @RequestParam @Nullable String userId) {
+
+    }
+
+    @GetMapping
+    @RequestMapping("/{itemId}")
+    public AchievementItem findById(@PathVariable String gameId, @PathVariable String itemId) {
+        return new AchievementItem();
+    }
+
+    @DeleteMapping
+    @RequestMapping("/{itemId}")
+    public void deleteItem(@PathVariable String gameId, @PathVariable String itemId) {
 
     }
 }
-
-// /games/{}/achievements
-// /games/{}/
-// /games/{}/play-history
-// /games/{}/purchase-history
-// /invoices/{}
-// /shopping-cart
-//
-//
-//
-//
-//

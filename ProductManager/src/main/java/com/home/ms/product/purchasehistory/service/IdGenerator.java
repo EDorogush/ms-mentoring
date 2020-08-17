@@ -1,4 +1,4 @@
-package com.home.ms.product.game.service;
+package com.home.ms.product.purchasehistory.service;
 
 import org.springframework.stereotype.Component;
 
@@ -7,8 +7,7 @@ import java.util.UUID;
 @Component
 public class IdGenerator {
 
-    String generateRandomUUID() {
+    public String generateRandomUUID() {
         return UUID.randomUUID().toString();
     }
-
 }

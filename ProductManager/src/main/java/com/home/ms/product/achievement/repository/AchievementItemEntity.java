@@ -1,9 +1,31 @@
 package com.home.ms.product.achievement.repository;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "achievement_item")
 public class AchievementItemEntity {
 
+    /**
+     * item's id corresponds to unique pair of userId and gameId and is the same as PurchaseHistory's id.
+     * in order to reduce number of inner calls between applications database also contains useId and gameIg data
+     */
+    @Id
+    @Column(name = "id", length = 36, unique = true)
     private String id;
-    private long userGameRecordId;
+
+    @Column(name = "user_game_id")
+    private String userGameId;
+
+    @Column(name = "user_id", length = 36)
+    private String userId;
+
+    @Column(name = "game_id", length = 36)
+    private String gameId;
+
     private String achievement;
 
     public String getId() {
@@ -14,12 +36,28 @@ public class AchievementItemEntity {
         this.id = id;
     }
 
-    public long getUserGameRecordId() {
-        return userGameRecordId;
+    public String getUserGameId() {
+        return userGameId;
     }
 
-    public void setUserGameRecordId(long userGameRecordId) {
-        this.userGameRecordId = userGameRecordId;
+    public void setUserGameId(String userGameId) {
+        this.userGameId = userGameId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getGameId() {
+        return gameId;
+    }
+
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 
     public String getAchievement() {

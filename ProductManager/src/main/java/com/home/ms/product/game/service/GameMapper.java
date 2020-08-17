@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class GameMapper {
 
-    public Game formEntity(GameEntity entity) {
+    public Game fromEntity(GameEntity entity) {
         Game game = new Game();
         game.setId(entity.getId());
         game.setTitle(entity.getTitle());

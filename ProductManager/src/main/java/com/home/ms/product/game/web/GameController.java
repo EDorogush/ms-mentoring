@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/games")
@@ -30,13 +28,11 @@ public class GameController {
     @GetMapping
     public List<Game> searchGames(GameGetRequestParameters parameters) {
         GameSearchFilter filter = new GameSearchFilter();
-        getUserId(parameters.getOwnedBy())
-                .ifPresentOrElse(userId -> gameService.searchGamesInUserScope(userId, filter), gameService.searchGamesInGeneralScope(filter) );
-
-
-        filter.setUserId());
-
-        return gameService.searchGamesInUserScope(filter);
+        final String userId = getUserId(parameters.getOwnedBy());
+        if (userId == null) {
+            return gameService.searchGamesInGeneralScope(filter);
+        }
+        return gameService.searchGamesInUserScope(userId, filter);
     }
 
     @GetMapping("/{gameId}")
@@ -45,6 +41,12 @@ public class GameController {
     }
 
 
+    @DeleteMapping("/{gameId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteGame(@PathVariable("gameId") String id) {
+        gameService.deleteById(id);
+
+    }
 
 
     private URI buildLocation(String id) {
@@ -54,11 +56,19 @@ public class GameController {
                 .toUri();
     }
 
-    private Optional<String> getUserId(String ownedBy) {
+    private String getUserId(String ownedBy) {
         if (ownedBy == null || !ownedBy.equals("me")) {
-            return Optional.ofNullable(ownedBy);
+            return ownedBy;
         }
-        return Optional.of("user_id-9");
+        return "user_id-9";
 
     }
+
+
+    private GameSearchFilter getFilterFromRequest(GameGetRequestParameters params) {
+        //the place to retrieve filter params from request
+        return new GameSearchFilter();
+    }
+
+
 }
