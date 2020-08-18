@@ -22,11 +22,6 @@ public class GameAchievementController {
         return new AchievementItem();
     }
 
-    @DeleteMapping
-    public void deleteAllUserAchievements(@PathVariable String gameId, @RequestParam @Nullable String userId) {
-
-    }
-
     @GetMapping
     @RequestMapping("/{itemId}")
     public AchievementItem findById(@PathVariable String gameId, @PathVariable String itemId) {
