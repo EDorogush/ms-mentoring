@@ -17,7 +17,7 @@ current project contains a number of separate applications which serve next endp
 /shoppingCartItems
 /shoppingCartItems/{itemId}
 /aggregator/games?sortBy=
-aggregator/users?sortBy=
+/aggregator/users?sortBy=
 
 ```
 

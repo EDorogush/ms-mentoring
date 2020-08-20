@@ -4,7 +4,9 @@ import com.home.ms.invoice.service.InvoiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/invoices")
@@ -18,6 +20,11 @@ public class InvoiceController {
     @GetMapping
     public List<Invoice> searchInvoices(InvoiceGetRequestParameters params) {
         final String userId = getUserId(params.getOwnedBy());
+        if (params.getFrom() != null) {
+            final Instant searchFrom = params.getFrom();
+            final Instant searchTo = Optional.ofNullable(params.getTo()).orElse(Instant.now());
+            return invoiceService.searchInvoicesByTime(searchFrom, searchTo);
+        }
         return invoiceService.searchInvoicesByUserId(userId);
     }
 

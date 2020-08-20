@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.math.BigDecimal;
+import java.time.Instant;
 
 @Entity
 @Table(name = "invoices")
@@ -22,6 +23,8 @@ public class InvoiceEntity {
     @Column(name = "status")
     private int status;
 
+    @Column(name = "last_update")
+    private Instant lastUpdate;
 
     public String getId() {
         return id;
@@ -53,5 +56,13 @@ public class InvoiceEntity {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public Instant getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Instant lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

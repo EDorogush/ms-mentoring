@@ -1,7 +1,6 @@
-package com.home.ms.product.game.web;
+package com.home.ms.invoice.web;
 
-
-import com.home.ms.product.game.service.NotFoundException;
+import com.home.ms.invoice.service.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class GameExceptionHandler {
+public class InvoiceExceptionHandler {
     private static final String INTERNAL_ERROR_MESSAGE = "Internal error, sorry";
 
     @ExceptionHandler(Exception.class)
