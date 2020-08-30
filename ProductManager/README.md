@@ -56,3 +56,5 @@ netstat -vanp tcp | grep 5432
 ```
 ps aux | grep <pid>
 ```
+
+

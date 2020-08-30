@@ -4,8 +4,9 @@ spring:
       driver-class-name: org.postgresql.Driver
       maximum-pool-size: 10
       connection-timeout: 5000
-    url: jdbc:postgresql://localhost:5432/certificatedb?charSet=UNICODE
-    username: certificateuser
+    url: jdbc:postgresql://localhost:5433/product_manager_db?charSet=UNICODE
+    username: product_manager_user
+    password: abc123
   jpa:
     properties:
       hibernate:
