@@ -1,6 +1,5 @@
-package com.home.ms.invoice.web;
+package com.home.ms.invoice;
 
-import com.home.ms.invoice.service.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

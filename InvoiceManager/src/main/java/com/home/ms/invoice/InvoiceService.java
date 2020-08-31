@@ -1,8 +1,5 @@
-package com.home.ms.invoice.service;
+package com.home.ms.invoice;
 
-import com.home.ms.invoice.repository.InvoiceEntity;
-import com.home.ms.invoice.repository.InvoiceRepository;
-import com.home.ms.invoice.web.Invoice;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 

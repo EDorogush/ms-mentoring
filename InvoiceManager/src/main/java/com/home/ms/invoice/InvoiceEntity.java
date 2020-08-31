@@ -1,4 +1,4 @@
-package com.home.ms.invoice.repository;
+package com.home.ms.invoice;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.home.ms.shoppingcart.web;
+package com.home.ms.shoppingcart;
 
 public class ShoppingCartItem {
     private String id;

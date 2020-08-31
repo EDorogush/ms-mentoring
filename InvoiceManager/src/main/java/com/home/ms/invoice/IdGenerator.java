@@ -1,4 +1,4 @@
-package com.home.ms.invoice.service;
+package com.home.ms.invoice;
 
 import org.springframework.stereotype.Component;
 

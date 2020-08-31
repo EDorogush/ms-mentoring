@@ -1,8 +1,5 @@
-package com.home.ms.shoppingcart.service;
+package com.home.ms.shoppingcart;
 
-import com.home.ms.shoppingcart.repository.ShoppingCartEntity;
-import com.home.ms.shoppingcart.repository.ShoppingCartRepository;
-import com.home.ms.shoppingcart.web.ShoppingCartItem;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.home.ms.shoppingcart.repository;
+package com.home.ms.shoppingcart;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,4 +1,4 @@
-package com.home.ms.invoice.web;
+package com.home.ms.invoice;
 
 import java.math.BigDecimal;
 

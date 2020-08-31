@@ -4,8 +4,9 @@ spring:
       driver-class-name: org.postgresql.Driver
       maximum-pool-size: 10
       connection-timeout: 5000
-    url: jdbc:postgresql://localhost:5432/invoicedb?charSet=UNICODE
+    url: jdbc:postgresql://localhost:5435/invoicedb?charSet=UNICODE
     username: invoicedbuser
+    password: abc123
   jpa:
     properties:
       hibernate:
@@ -13,5 +14,7 @@ spring:
         jdbc.lob.non_contextual_creation: true
   mvc:
     locale: en
+server:
+  port: 8081
 
 

@@ -1,6 +1,5 @@
-package com.home.ms.shoppingcart.web;
+package com.home.ms.shoppingcart;
 
-import com.home.ms.shoppingcart.service.ShoppingCartService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

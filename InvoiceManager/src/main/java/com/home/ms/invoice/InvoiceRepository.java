@@ -1,4 +1,4 @@
-package com.home.ms.invoice.repository;
+package com.home.ms.invoice;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -11,6 +11,3 @@ CREATE TABLE invoices
     last_update        TIMESTAMP
 );
 
-ALTER TABLE invoices
-    OWNER TO invoicedbuser;
-

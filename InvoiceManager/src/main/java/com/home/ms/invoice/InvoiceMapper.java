@@ -1,7 +1,5 @@
-package com.home.ms.invoice.service;
+package com.home.ms.invoice;
 
-import com.home.ms.invoice.web.Invoice;
-import com.home.ms.invoice.repository.InvoiceEntity;
 import org.springframework.stereotype.Component;
 
 @Component

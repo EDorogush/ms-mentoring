@@ -15,4 +15,5 @@ spring:
   mvc:
     locale: en
 
-
+server:
+  port: 8080

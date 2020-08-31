@@ -1,6 +1,5 @@
-package com.home.ms.invoice.web;
+package com.home.ms.invoice;
 
-import com.home.ms.invoice.service.InvoiceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

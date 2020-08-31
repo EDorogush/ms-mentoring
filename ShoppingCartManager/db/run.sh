@@ -13,14 +13,14 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "work in directory: ${DIR}"
 cd "$DIR"
 
-DOCKER_NAME='invoice_manager_postgres'
+DOCKER_NAME='shopping_cart_manager_postgres'
 HOST='localhost'
-EXT_PORT=5435
+EXT_PORT=5434
 PASSWORD='abc123'
 HOST_INTERNAL='docker.for.mac.localhost'
 
-APP_DATABASE='invoicedb'
-APP_DATABASE_USER='invoicedbuser'
+APP_DATABASE='shoppingcartdb'
+APP_DATABASE_USER='shoppingcartuser'
 APP_USER_PASSWORD='abc123'
 
 
@@ -90,7 +90,7 @@ postgresRunScriptFile "${APP_DATABASE}" postgres "${PASSWORD}" 'dbscripts/grandR
 echo 'start filling  tables...'
 postgresRunScriptFile "${APP_DATABASE}" "${APP_DATABASE_USER}" "${APP_USER_PASSWORD}" 'dbscripts/dbInitData.sql'
 echo 'done'
-postgresRunSqlCommand "${APP_DATABASE}" "${APP_DATABASE_USER}" "${APP_USER_PASSWORD}" 'select * from invoices'
+postgresRunSqlCommand "${APP_DATABASE}" "${APP_DATABASE_USER}" "${APP_USER_PASSWORD}" 'select * from shoppingcarts'
 
 
 

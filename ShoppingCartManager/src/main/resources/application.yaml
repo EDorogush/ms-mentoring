@@ -4,8 +4,9 @@ spring:
       driver-class-name: org.postgresql.Driver
       maximum-pool-size: 10
       connection-timeout: 5000
-    url: jdbc:postgresql://localhost:5432/shoppingcartdb?charSet=UNICODE
+    url: jdbc:postgresql://localhost:5434/shoppingcartdb?charSet=UNICODE
     username: shoppingcartuser
+    password: abc123
   jpa:
     properties:
       hibernate:
@@ -14,4 +15,5 @@ spring:
   mvc:
     locale: en
 
-
+server:
+  port: 8082
