@@ -45,6 +45,6 @@ public class PurchaseHistoryController {
 
   private String getUserId(String userIdFromParam) {
     // request to authorisation service to retrieve userId and rights
-    return Objects.requireNonNullElse(userIdFromParam, "abc");
+    return Objects.requireNonNullElse(userIdFromParam, "user_id-9");
   }
 }

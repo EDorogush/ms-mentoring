@@ -26,7 +26,6 @@ APP_USER_PASSWORD='abc123'
 
 echo 'Starting docker in background. To kill use:'
 echo "docker kill ${DOCKER_NAME}"
-# docker kill product_manager_postgres
 docker run \
 --rm \
 --name="${DOCKER_NAME}" \

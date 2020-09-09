@@ -1,8 +1,12 @@
 package com.home.ms.product.purchasehistory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.home.ms.product.IdGenerator;
+import com.home.ms.product.RequestFailedException;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.http.HttpClient;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,10 +38,24 @@ public class PurchaseHistoryService {
     entity.setUserId(userId);
     entity.setId(idGenerator.generateRandomUUID());
     repository.save(entity);
+    try {
+      sentData(entity);
+    } catch (RequestFailedException e) {
+      repository.deleteById(entity.getId());
+      throw e;
+    }
     return mapper.fromEntity(entity);
   }
 
   public void deleteGameFromHistory(String userId, String gameId) {
     repository.deleteByUserIdAndGameId(userId, gameId);
+  }
+
+  private void sentData(PurchaseHistoryEntity entity) {
+    HttpClient client = HttpClient.newHttpClient();
+    URI uri = URI.create("http://localhost:8080/games/" + entity.getGameId());
+    PostUserHistoryRequestOperation requestOperation =
+        new PostUserHistoryRequestOperation(client, uri, new ObjectMapper());
+    requestOperation.doOperation(entity.getId(), entity.getUserId(), entity.getGameId());
   }
 }
