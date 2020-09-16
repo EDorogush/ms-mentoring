@@ -1,6 +1,6 @@
 package com.home.ms.shoppingcart.web;
 
-import com.home.ms.shoppingcart.service.NotFoundException;
+import com.home.ms.shoppingcart.service.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;

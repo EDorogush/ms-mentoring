@@ -1,5 +1,7 @@
 package com.home.ms;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.home.ms.shoppingcart.service.IdGenerator;
 import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +14,16 @@ import java.net.http.HttpClient;
 public class Application {
   public static void main(String[] args) {
     SpringApplication.run(Application.class, args);
+  }
+
+  @Bean
+  IdGenerator idGenerator() {
+    return new IdGenerator();
+  }
+
+  @Bean
+  public ObjectMapper objectMapper() {
+    return new ObjectMapper();
   }
 
   @Bean

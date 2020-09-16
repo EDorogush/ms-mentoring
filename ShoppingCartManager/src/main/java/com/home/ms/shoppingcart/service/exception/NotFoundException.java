@@ -1,4 +1,4 @@
-package com.home.ms.shoppingcart.service;
+package com.home.ms.shoppingcart.service.exception;
 
 import java.text.MessageFormat;
 

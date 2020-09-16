@@ -3,7 +3,7 @@ package com.home.ms.shoppingcart;
 import com.home.ms.shoppingcart.repository.ShoppingCartRepository;
 import com.home.ms.shoppingcart.repository.ShoppingCartStatus;
 import com.home.ms.shoppingcart.service.*;
-import com.home.ms.shoppingcart.service.invoice.InvoiceProducer;
+import com.home.ms.shoppingcart.service.invoice.RabbitMqInvoiceProducer;
 import com.home.ms.shoppingcart.service.purchasehistory.PurchaseHistoryRequestProducer;
 import com.home.ms.shoppingcart.web.ShoppingCart;
 import com.home.ms.shoppingcart.web.ShoppingCartElement;
@@ -23,7 +23,6 @@ import org.springframework.test.jdbc.JdbcTestUtils;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-// todo:test unfinished!
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
@@ -41,7 +40,7 @@ class ShoppingCartServiceTest {
   @Autowired IdGenerator idGenerator;
 
   @Mock
-  InvoiceProducer mockInvoiceProducer;
+  RabbitMqInvoiceProducer mockRabbitMqInvoiceProducer;
   @Mock
   PurchaseHistoryRequestProducer mockPurchaseHistoryProducer;
 
@@ -53,7 +52,7 @@ class ShoppingCartServiceTest {
             repository,
             new ShoppingCartMapper(),
             idGenerator,
-            mockInvoiceProducer,
+                mockRabbitMqInvoiceProducer,
             mockPurchaseHistoryProducer);
   }
 
@@ -70,7 +69,6 @@ class ShoppingCartServiceTest {
 
   @Test
   public void checkFindShoppingCartReturnsRightResult() {
-    // todo: test is unfinished
     final String userId = "user_id-2";
     ShoppingCart shoppingCart = shoppingCartService.findShoppingCart(userId);
     assertThat(shoppingCart.getGameIds().size(), is(2));

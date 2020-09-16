@@ -1,4 +1,4 @@
-package com.home.ms.invoice;
+package com.home.ms.invoice.model;
 
 import org.springframework.http.HttpStatus;
 

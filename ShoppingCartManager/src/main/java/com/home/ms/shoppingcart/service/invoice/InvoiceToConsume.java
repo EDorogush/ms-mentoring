@@ -1,10 +1,12 @@
 package com.home.ms.shoppingcart.service.invoice;
 
 public class InvoiceToConsume {
+  private final String id;
   private final String userId;
   private final boolean approved;
 
-  public InvoiceToConsume(String userId, boolean approved) {
+  public InvoiceToConsume(String id, String userId, boolean approved) {
+    this.id = id;
     this.userId = userId;
     this.approved = approved;
   }
@@ -15,5 +17,9 @@ public class InvoiceToConsume {
 
   public boolean isApproved() {
     return approved;
+  }
+
+  public String getId() {
+    return id;
   }
 }

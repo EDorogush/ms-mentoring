@@ -1,6 +1,7 @@
 package com.home.ms.shoppingcart.service.purchasehistory;
 
 import com.home.ms.shoppingcart.service.HttpRequestResultStatusCodeResolver;
+import com.home.ms.shoppingcart.service.RequestDetail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,6 @@ public class PurchaseHistoryPostRequestStatusCodeResolver
 
   @Override
   public RetryDataModel resolveStatusCode(Integer statusCode, RequestDetail requestDetail) {
-    // todo::use model for request details to pass details to logger
     switch (statusCode) {
       case 500:
       case 404:

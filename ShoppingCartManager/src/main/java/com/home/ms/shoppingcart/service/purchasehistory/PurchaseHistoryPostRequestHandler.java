@@ -3,6 +3,7 @@ package com.home.ms.shoppingcart.service.purchasehistory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.home.ms.shoppingcart.service.RequestHandler;
+import com.home.ms.shoppingcart.service.exception.SendMessageException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -60,6 +61,6 @@ public class PurchaseHistoryPostRequestHandler
     } else {
       logger.error("error during connection:", ex);
     }
-    throw new RequestFailedException(ex);
+    throw new SendMessageException(ex);
   }
 }

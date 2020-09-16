@@ -1,8 +1,9 @@
 package com.home.ms.shoppingcart.service.purchasehistory;
 
+import com.home.ms.shoppingcart.service.RequestDetail;
+import com.home.ms.shoppingcart.service.exception.SendMessageException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,7 +25,14 @@ public class PurchaseHistoryRequestProducer {
     this.requestHandler = requestHandler;
   }
 
-  public void sendPostOne(String userId, String gameId, BigDecimal price) {
+  /**
+   * @param userId
+   * @param gameId
+   * @param price
+   * @return statusCode to be able to resolve behaviour if request results in "failed" response code
+   * @trows SendMessageException if request failed
+   */
+  public int sendPostOne(String userId, String gameId, BigDecimal price) {
     // todo: do not use instant.now what time should be used?
     // todo: need to pass userId!!!
     final HttpRequest request =
@@ -41,16 +49,15 @@ public class PurchaseHistoryRequestProducer {
         requestDetail.setCurrentAttempt(retryDataModel.getAttempt());
         delay = retryDataModel.getDelay();
 
-      } catch (RequestFailedException e) {
-        logger.info(e);
+      } catch (SendMessageException e) {
+        if (requestDetail.getCurrentAttempt() == (requestDetail.getCurrentAttempt() + 1)) {
+          throw e;
+        }
         requestDetail.setCurrentAttempt(requestDetail.getCurrentAttempt() + 1);
         delay = Duration.ofSeconds(1);
       }
     }
-    if (!(statusCode == HttpStatus.NO_CONTENT.value()) && !(statusCode == HttpStatus.OK.value())) {
-      // todo: set it as Checked exception?
-      throw new RequestFailedException("failed post request to service");
-    }
+    return statusCode;
   }
 
   private void waitBeforeRequest(Duration delay) {

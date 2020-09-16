@@ -3,11 +3,11 @@ package com.home.ms.shoppingcart.service.invoice;
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public class InvoiceToProduce {
+public class InvoiceToSend {
   private final String userId;
   private final BigDecimal invoice;
 
-  public InvoiceToProduce(String userId, BigDecimal invoice) {
+  public InvoiceToSend(String userId, BigDecimal invoice) {
     this.userId = userId;
     this.invoice = invoice;
   }
@@ -24,7 +24,7 @@ public class InvoiceToProduce {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    InvoiceToProduce that = (InvoiceToProduce) o;
+    InvoiceToSend that = (InvoiceToSend) o;
     return Objects.equals(userId, that.userId) && Objects.equals(invoice, that.invoice);
   }
 

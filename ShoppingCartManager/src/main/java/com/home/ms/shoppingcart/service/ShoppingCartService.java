@@ -4,14 +4,15 @@ import com.home.ms.shoppingcart.repository.ShoppingCartEntity;
 import com.home.ms.shoppingcart.repository.ShoppingCartEntityElement;
 import com.home.ms.shoppingcart.repository.ShoppingCartRepository;
 import com.home.ms.shoppingcart.repository.ShoppingCartStatus;
-import com.home.ms.shoppingcart.service.invoice.InvoiceProducer;
-import com.home.ms.shoppingcart.service.invoice.InvoiceToProduce;
+import com.home.ms.shoppingcart.service.exception.NotFoundException;
+import com.home.ms.shoppingcart.service.exception.SendMessageException;
+import com.home.ms.shoppingcart.service.invoice.InvoiceToSend;
 import com.home.ms.shoppingcart.service.purchasehistory.PurchaseHistoryRequestProducer;
-import com.home.ms.shoppingcart.service.purchasehistory.RequestFailedException;
 import com.home.ms.shoppingcart.web.ShoppingCart;
 import com.home.ms.shoppingcart.web.ShoppingCartElement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,14 +24,14 @@ public class ShoppingCartService {
   private final ShoppingCartRepository repository;
   private final ShoppingCartMapper mapper;
   private final IdGenerator idGenerator;
-  private final InvoiceProducer invoiceProducer;
+  private final MessageBrokerMessageProducer<InvoiceToSend> invoiceProducer;
   private final PurchaseHistoryRequestProducer purchaseHistoryProducer;
 
   public ShoppingCartService(
       ShoppingCartRepository repository,
       ShoppingCartMapper mapper,
       IdGenerator idGenerator,
-      InvoiceProducer invoiceProducer,
+      MessageBrokerMessageProducer<InvoiceToSend> invoiceProducer,
       PurchaseHistoryRequestProducer purchaseHistoryProducer) {
     this.repository = repository;
     this.mapper = mapper;
@@ -87,7 +88,6 @@ public class ShoppingCartService {
 
   public void updateStateWithStatusInvoice(String userId) {
     ShoppingCartEntity entity = repository.findById(userId).orElseThrow();
-    // todo: check if elements are not empty
     entity.setStatus(ShoppingCartStatus.INVOICE);
     repository.saveAndFlush(entity);
 
@@ -95,8 +95,12 @@ public class ShoppingCartService {
         entity.getElements().stream()
             .map(ShoppingCartEntityElement::getPrice)
             .reduce(BigDecimal.ZERO, BigDecimal::add);
-    InvoiceToProduce invoiceItem = new InvoiceToProduce(userId, invoice);
-    invoiceProducer.sendInvoice(invoiceItem);
+    InvoiceToSend invoiceItem = new InvoiceToSend(userId, invoice);
+    try {
+      invoiceProducer.sendMessage(invoiceItem);
+    } catch (SendMessageException e) {
+      logger.error(e);
+    }
   }
 
   public void updateStateWithStatusApproved(String userId) {
@@ -104,12 +108,19 @@ public class ShoppingCartService {
     entity.setStatus(ShoppingCartStatus.APPROVED);
     repository.saveAndFlush(entity);
     for (ShoppingCartEntityElement element : entity.getElements()) {
+      int statusCode = 0;
       try {
-        purchaseHistoryProducer.sendPostOne(userId, element.getGameId(), element.getPrice());
+        statusCode =
+            purchaseHistoryProducer.sendPostOne(userId, element.getGameId(), element.getPrice());
         removeItemFromList(userId, element.getGameId());
-      } catch (RequestFailedException e) {
+      } catch (SendMessageException e) {
         // todo: need details. RequestFailedException e should contain reason to use in circuit
         // breaker
+        logger.error("failed to send data");
+        entity.setStatus(ShoppingCartStatus.STUCK);
+      }
+      if (!(statusCode == HttpStatus.NO_CONTENT.value())
+          && !(statusCode == HttpStatus.OK.value())) {
         logger.error("failed to send data");
         entity.setStatus(ShoppingCartStatus.STUCK);
       }

@@ -40,7 +40,6 @@ public class ShoppingCartController {
   @PatchMapping
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void updateStatus(@RequestParam String status) {
-    // todo:do not like it. have question!
     final String userId = getUserId();
     shoppingCartService.updateStateWithStatusInvoice(userId);
   }

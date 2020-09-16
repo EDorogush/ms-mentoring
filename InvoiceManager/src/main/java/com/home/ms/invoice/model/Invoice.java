@@ -1,7 +1,10 @@
-package com.home.ms.invoice;
+package com.home.ms.invoice.model;
 
 import java.math.BigDecimal;
 
+/**
+ * class contains full actual data about current invoice
+ */
 public class Invoice {
     private String id;
     private String userId;
