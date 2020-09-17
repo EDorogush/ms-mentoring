@@ -59,6 +59,7 @@ public class InvoiceConsumer {
           Thread.currentThread().interrupt();
         }
       }
+      currentAttempt = maxAttempt;
     }
   }
 

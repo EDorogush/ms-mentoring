@@ -23,7 +23,7 @@ rabbitmq:
   port: 5672
   consumer-queue:
     name: invoiceToPay
-  produser-queue:
+  producer-queue:
     name: invoiceResult
 
 purchase-history-app:

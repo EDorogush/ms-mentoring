@@ -59,6 +59,7 @@ class RabbitMqInvoiceConsumer {
           Thread.currentThread().interrupt();
         }
       }
+      currentAttempt = maxAttempt;
     }
   }
 

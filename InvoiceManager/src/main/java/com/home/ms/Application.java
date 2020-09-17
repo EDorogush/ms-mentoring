@@ -18,10 +18,6 @@ public class Application {
     SpringApplication.run(Application.class, args);
   }
 
-  @Bean
-  IdGenerator idGenerator() {
-    return new IdGenerator();
-  }
 
   @Bean
   public ObjectMapper objectMapper() {

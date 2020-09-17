@@ -19,8 +19,11 @@ EXT_PORT=5672
 PASSWORD='abc123'
 HOST_INTERNAL='docker.for.mac.localhost'
 
-echo 'Starting docker in background. To kill use:'
+echo 'Starting docker in foreground. To kill use:'
 echo "docker kill ${DOCKER_NAME}"
+
+echo 'after application starts go to http://localhost:15672/ with login: guest and password: guest'
+
 docker run \
 --rm \
 --name="${DOCKER_NAME}" \

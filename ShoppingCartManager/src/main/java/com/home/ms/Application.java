@@ -17,11 +17,6 @@ public class Application {
   }
 
   @Bean
-  IdGenerator idGenerator() {
-    return new IdGenerator();
-  }
-
-  @Bean
   public ObjectMapper objectMapper() {
     return new ObjectMapper();
   }
