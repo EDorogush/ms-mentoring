@@ -1,2 +1,2 @@
-GRANT INSERT, SELECT, DELETE ON TABLE invoices TO invoicedbuser;
+GRANT INSERT, SELECT, DELETE, UPDATE ON TABLE invoices TO invoicedbuser;
 

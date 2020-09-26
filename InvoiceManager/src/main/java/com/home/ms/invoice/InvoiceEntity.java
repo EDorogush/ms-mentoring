@@ -1,9 +1,6 @@
 package com.home.ms.invoice;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.Instant;
 
@@ -21,7 +18,8 @@ public class InvoiceEntity {
     private BigDecimal bill;
 
     @Column(name = "status")
-    private int status;
+    @Enumerated(EnumType.STRING)
+    private InvoiceEntityStatus status;
 
     @Column(name = "last_update")
     private Instant lastUpdate;
@@ -50,11 +48,11 @@ public class InvoiceEntity {
         this.bill = bill;
     }
 
-    public int getStatus() {
+    public InvoiceEntityStatus getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(InvoiceEntityStatus status) {
         this.status = status;
     }
 

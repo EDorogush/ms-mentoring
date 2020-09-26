@@ -1,4 +1,4 @@
-package com.home.ms.invoice;
+package com.home.ms.invoice.exception;
 
 import java.text.MessageFormat;
 

@@ -14,10 +14,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'com.rabbitmq:amqp-client:5.9.0'
+
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+//    testCompile 'org.springframework.boot:spring-boot-starter-test'
+//    testCompile 'org.junit.jupiter:junit-jupiter-api'
+//    testCompile 'org.junit.jupiter:junit-jupiter-engine'
+    testCompile 'com.h2database:h2'
 }
 
 test {

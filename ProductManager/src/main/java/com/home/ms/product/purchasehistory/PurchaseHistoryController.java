@@ -24,9 +24,8 @@ public class PurchaseHistoryController {
   }
 
   @PostMapping
-  public PurchaseHistoryItem addToPurchased(@RequestBody PurchaseHistoryItem item) {
-    final String userId = getUserId(null);
-    return service.addItem(item, userId);
+  public PurchaseHistoryItem addToPurchased(@RequestBody PurchaseHistoryItemToPost item) {
+    return service.addItem(item);
   }
 
   @RequestMapping("/games")
@@ -45,6 +44,6 @@ public class PurchaseHistoryController {
 
   private String getUserId(String userIdFromParam) {
     // request to authorisation service to retrieve userId and rights
-    return Objects.requireNonNullElse(userIdFromParam, "abc");
+    return Objects.requireNonNullElse(userIdFromParam, "user_id-9");
   }
 }

@@ -17,3 +17,15 @@ spring:
 
 server:
   port: 8082
+
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  producer-queue:
+    name: invoiceToPay
+  consumer-queue:
+    name: invoiceResult
+
+purchase-history-app:
+  url: http://localhost:8080/purchase-history/

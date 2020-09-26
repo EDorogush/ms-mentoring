@@ -21,38 +21,47 @@ current project contains a number of separate applications which serve next endp
 
 ```
 
-need to update/fix code:
-    1. playHistory per game,  gameid go through request params. Entity have id, userId, gameId, value
-usecases (do I need userGameid column in table ? )
-    2. there are should be mapping of gameid to unique list of achievemnt
-    
+RabbitMQ is used to manage interaction between two services: ShoppingCartManager (com.home.ms.shoppingcart.service.invoice) and InvoiceManager
 
-SELECT:
-SELECT games
-    get games needs request to purchasehistory do we need to have duplicate data about user's purchase?
-    anyway, we need sync request to purchase history to get list of user's games. 
-    what if we'll need another filter?
-SELECT  playHistory:
-    do not need cross request here
-Select purchase history
-    do not need cross request here
-selesct achievement
-    do not need cross request here
-
-get shopping cart: 
-    get shoppingcart items, then get games per each item
-    
-      
-    
+Both Consumers and Producers are implemented in services. Producers are used from service methods, consumers are work independently as messagebroker's queue listeners.
  
+ShoppingCartManager messageProducer usage: see com.home.ms.shoppingcart.service.ShoppingCartService#updateStateWithStatusInvoice
 
-1. add game to catalog
-    1. post /games
-    2. post /games/{gameId}/achievements
-    3. send notification to aggregator
+ShoppingCartManager messageConsumer usage: see com.home.ms.shoppingcart.service.invoice.InvoiceConsumer
+
+InvoiceManager messageConsumer usage: see com.home.ms.invoice.messagebroker.RabbitMqInvoiceConsumer
+
+InvoiceManager messageProducer usage: see com.home.ms.invoice.InvoiceProcessor#processInvoice
+
+Async requests with retry pattern are used in next services: ShoppingCartManager, ProductManager/PurchaseHistory (both implementations are the same)
+
+ShoppingCartManager request usage: see com.home.ms.shoppingcart.service.ShoppingCartService#updateStateWithStatusApproved
+
+PurchaseHistory request usage: see com.home.ms.product.purchasehistory.PurchaseHistoryService#addItem
+
+
+All workflow "buy a game"
+
+user fills his shopping cart by items. Then he push "pay" button (HTTP patch to /shoppingCart).
+after that next steps occur (optimistic scenario):
+
+1, user's shopping cart is "locked" by status INVOICE and data is sent to Invoice manager (by messageQueue broker). user recieves no content at response ans his next HTTP GET /shoppingCart requests will return list of items and shopping cart status "invoice sent"
+
+2. InvoiceManager receives the message from MBQ and write invoice item to database with status "WAIT"
+
+3. separate InvoiceManager's service InvoiceProcessor periodically search database for invoices with "WAIT" status. If any founded invoiceProcessor tries to update item's status from "WAIT" to "PROCESS" and start processing. When processing is finished invoice's status is updated from "PROCESS" to "OK" or "REJECTED" and result message is sent to MBQ
+
+4. ShoppingCartManager receives the message from MBQ with invoice result. If invoice's status is "OK", shoppingCart's
+ status is updated to "APPROVED" and data about purchased games is sent to purchase history (async HTTP post /purchase-history). 
+
+5. When purchaseHistory process post request (HTTP post /purchase-history) it also sends async HTTP post request to /games to duplicate user/game data to game.
+
+6. if all within steps 4 and 5 is OK, shopping cart is cleaned from elements.
+
+Orchestration pattern: ShoppingCartManager could be Orchestrator
+
+Choreography patterns: ShoppingCartManager-PurchaseHistory-GamesUserHistory could be Choreography
     
-2. user is buying game
-    1. post /shoppingCartItems (keep shopping cart status?)
-    2. post invoice to start purchase procedure
-    3. post /shoppingCartItems - status??? to keep "invoice sent operation"
-    3. wait fot
+
+
+   

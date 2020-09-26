@@ -9,6 +9,9 @@ import javax.persistence.Table;
  * represents storage that contain data about of users purchased games. it is needed to decrease the
  * amount of cross requests
  */
+//todo:get games needs request to purchasehistory do we need to have duplicate data about user's purchase?
+//    anyway, we need sync request to purchase history to get list of user's games.
+//    what if we'll need another filter?
 @Entity
 @Table(name = "user_games")
 public class UserGamesEntity {

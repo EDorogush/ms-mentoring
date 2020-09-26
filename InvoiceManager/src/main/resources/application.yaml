@@ -18,3 +18,13 @@ server:
   port: 8081
 
 
+rabbitmq:
+  host: localhost
+  port: 5672
+  consumer-queue:
+    name: invoiceToPay
+  producer-queue:
+    name: invoiceResult
+
+purchase-history-app:
+  url: http://localhost:8080/purchase-history/
