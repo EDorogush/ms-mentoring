@@ -52,7 +52,12 @@ public class InvoiceProcessor {
     repository.saveAndFlush(entityToProcess);
     final boolean invoicePaid = entityToProcess.getStatus() == InvoiceEntityStatus.OK;
     try {
-      messageProducer.sendMessage(new InvoiceResult(entityToProcess.getUserId(), invoicePaid));
+      messageProducer.sendMessage(
+          new InvoiceResult(
+              entityToProcess.getId(),
+              entityToProcess.getUserId(),
+              invoicePaid,
+              entityToProcess.getLastUpdate()));
     } catch (SendMessageException e) {
       logger.warn(e);
     }

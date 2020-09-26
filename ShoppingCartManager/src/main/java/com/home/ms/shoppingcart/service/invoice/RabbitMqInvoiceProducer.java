@@ -1,8 +1,7 @@
 package com.home.ms.shoppingcart.service.invoice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.home.ms.shoppingcart.service.MessageBrokerMessageProducer;
-import com.home.ms.shoppingcart.service.exception.SendMessageException;
+import com.home.ms.shoppingcart.service.exception.SendRequestException;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -35,7 +34,7 @@ public class RabbitMqInvoiceProducer implements MessageBrokerMessageProducer<Inv
       channel.basicPublish("", queueName, null, objectMapper.writeValueAsBytes(dataToSend));
       logger.info(" Sent invoice: {}", dataToSend.toString());
     } catch (Exception e) {
-      throw new SendMessageException(e);
+      throw new SendRequestException(e);
     }
   }
 }

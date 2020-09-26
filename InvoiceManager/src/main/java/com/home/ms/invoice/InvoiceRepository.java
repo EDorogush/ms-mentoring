@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,7 @@ public interface InvoiceRepository extends JpaRepository<InvoiceEntity, String> 
   Optional<InvoiceEntity> findByStatus(InvoiceEntityStatus status);
 
   @Modifying
+  @Transactional
   @Query(
       value = "UPDATE invoices u SET status = :to WHERE u.id = :id AND u.status = :from",
       nativeQuery = true)

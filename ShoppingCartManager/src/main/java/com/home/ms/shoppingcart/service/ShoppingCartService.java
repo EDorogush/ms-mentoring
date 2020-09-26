@@ -5,17 +5,20 @@ import com.home.ms.shoppingcart.repository.ShoppingCartEntityElement;
 import com.home.ms.shoppingcart.repository.ShoppingCartRepository;
 import com.home.ms.shoppingcart.repository.ShoppingCartStatus;
 import com.home.ms.shoppingcart.service.exception.NotFoundException;
-import com.home.ms.shoppingcart.service.exception.SendMessageException;
+import com.home.ms.shoppingcart.service.exception.RequestFailedException;
+import com.home.ms.shoppingcart.service.exception.SendRequestException;
 import com.home.ms.shoppingcart.service.invoice.InvoiceToSend;
+import com.home.ms.shoppingcart.service.invoice.MessageBrokerMessageProducer;
 import com.home.ms.shoppingcart.service.purchasehistory.PurchaseHistoryRequestProducer;
 import com.home.ms.shoppingcart.web.ShoppingCart;
 import com.home.ms.shoppingcart.web.ShoppingCartElement;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.ArrayList;
 
 @Service
@@ -63,6 +66,7 @@ public class ShoppingCartService {
    * @param userId
    * @param itemElement
    */
+  @Transactional
   public void addItem(String userId, ShoppingCartElement itemElement) {
     ShoppingCartEntity entity =
         repository
@@ -76,6 +80,7 @@ public class ShoppingCartService {
                 });
     ShoppingCartEntityElement element = mapper.toEntityElement(itemElement);
     element.setId(idGenerator.generateRandomUUID());
+    element.setUserId(userId);
     entity.addElement(element);
     repository.saveAndFlush(entity);
   }
@@ -98,31 +103,23 @@ public class ShoppingCartService {
     InvoiceToSend invoiceItem = new InvoiceToSend(userId, invoice);
     try {
       invoiceProducer.sendMessage(invoiceItem);
-    } catch (SendMessageException e) {
+    } catch (SendRequestException e) {
       logger.error(e);
     }
   }
 
-  public void updateStateWithStatusApproved(String userId) {
+  public void updateStateWithStatusApproved(String userId, Instant purchaseTime) {
+    ShoppingCartEntity entity0 = repository.findById(userId).orElseThrow();
+    entity0.setStatus(ShoppingCartStatus.APPROVED);
+    repository.saveAndFlush(entity0);
     ShoppingCartEntity entity = repository.findById(userId).orElseThrow();
-    entity.setStatus(ShoppingCartStatus.APPROVED);
-    repository.saveAndFlush(entity);
     for (ShoppingCartEntityElement element : entity.getElements()) {
-      int statusCode = 0;
       try {
-        statusCode =
-            purchaseHistoryProducer.sendPostOne(userId, element.getGameId(), element.getPrice());
+        purchaseHistoryProducer.sendPostOne(
+            userId, element.getGameId(), element.getPrice(), purchaseTime);
         removeItemFromList(userId, element.getGameId());
-      } catch (SendMessageException e) {
-        // todo: need details. RequestFailedException e should contain reason to use in circuit
-        // breaker
-        logger.error("failed to send data");
-        entity.setStatus(ShoppingCartStatus.STUCK);
-      }
-      if (!(statusCode == HttpStatus.NO_CONTENT.value())
-          && !(statusCode == HttpStatus.OK.value())) {
-        logger.error("failed to send data");
-        entity.setStatus(ShoppingCartStatus.STUCK);
+      } catch (RequestFailedException e) {
+        updateStateWithStatusStuck(e, userId, element, entity);
       }
     }
   }
@@ -136,5 +133,31 @@ public class ShoppingCartService {
     repository.saveAndFlush(entity);
     // leave as it is, do not delete
 
+  }
+
+  private void updateStateWithStatusStuck(
+      RequestFailedException e,
+      String userId,
+      ShoppingCartEntityElement element,
+      ShoppingCartEntity entity) {
+    if (e.getResponseStatusCode() != null) {
+      logger.error(
+          "sending data to {} for userId={}, cartElement = {} price = {} failed with codee = {}",
+          purchaseHistoryProducer.getRequestURI(),
+          userId,
+          element.getGameId(),
+          element.getPrice(),
+          e.getResponseStatusCode());
+    } else {
+      logger.error(
+          "sending data to {} for userId={}, cartElement = {} price = {} failed ",
+          purchaseHistoryProducer.getRequestURI(),
+          userId,
+          element.getGameId(),
+          element.getPrice(),
+          e);
+    }
+    entity.setStatus(ShoppingCartStatus.STUCK);
+    repository.saveAndFlush(entity);
   }
 }

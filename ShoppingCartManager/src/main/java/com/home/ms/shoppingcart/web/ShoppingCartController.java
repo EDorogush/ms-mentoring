@@ -32,7 +32,7 @@ public class ShoppingCartController {
 
   @DeleteMapping()
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(@PathVariable String itemId, @RequestParam String gameId) {
+  public void delete(@RequestParam String gameId) {
     final String userId = getUserId();
     shoppingCartService.removeItemFromList(userId, gameId);
   }

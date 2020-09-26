@@ -24,7 +24,8 @@ public class InvoiceServiceDeliveryCallback implements DeliverCallback {
     InvoiceToConsume invoiceResult =
         objectMapper.readValue(message.getBody(), InvoiceToConsume.class);
     if (invoiceResult.isApproved()) {
-      shoppingCartService.updateStateWithStatusApproved(invoiceResult.getUserId());
+      shoppingCartService.updateStateWithStatusApproved(
+          invoiceResult.getUserId(), invoiceResult.getPurchaseTime());
     } else {
       shoppingCartService.updateStateWithStatusRejected(invoiceResult.getUserId());
     }

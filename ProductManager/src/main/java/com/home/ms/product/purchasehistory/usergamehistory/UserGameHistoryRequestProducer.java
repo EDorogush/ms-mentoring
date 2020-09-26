@@ -1,36 +1,32 @@
-package com.home.ms.shoppingcart.service.purchasehistory;
+package com.home.ms.product.purchasehistory.usergamehistory;
 
-import com.home.ms.shoppingcart.service.exception.RequestFailedException;
-import com.home.ms.shoppingcart.service.exception.SendRequestException;
+import com.home.ms.product.RequestFailedException;
+import com.home.ms.product.SendRequestException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.net.http.HttpRequest;
 import java.text.MessageFormat;
 import java.time.Duration;
-import java.time.Instant;
 
 @Service
-public class PurchaseHistoryRequestProducer {
+public class UserGameHistoryRequestProducer {
   private static final Logger logger = LogManager.getLogger();
   private static final String MESSAGE_PATTERN = "request returns code {0}";
   private final HttpRequestResultStatusCodeResolver statusCodeResolver;
-  private final RequestHandler<Integer, PurchaseHistoryToPost> requestHandler;
+  private final RequestHandler<Integer, UserGameItemToPost> requestHandler;
 
-  public PurchaseHistoryRequestProducer(
-      PurchaseHistoryPostRequestStatusCodeResolver statusCodeResolver,
-      PurchaseHistoryPostRequestHandler requestHandler) {
+  public UserGameHistoryRequestProducer(
+      HttpRequestResultStatusCodeResolver statusCodeResolver,
+      RequestHandler<Integer, UserGameItemToPost> requestHandler) {
     this.statusCodeResolver = statusCodeResolver;
     this.requestHandler = requestHandler;
   }
 
-
-  public int sendPostOne(String userId, String gameId, BigDecimal price, Instant purchaseTime) {
+  public int sendPostOne(String id, String userId, String gameId) {
     final HttpRequest request =
-        requestHandler.prepareRequest(
-            new PurchaseHistoryToPost(userId, gameId, purchaseTime, price));
+        requestHandler.prepareRequest(new UserGameItemToPost(userId, gameId, id));
     boolean lastAttempt = false;
     int attemptCounter = 0;
     Duration delayBeforeNextAttempt;
@@ -65,7 +61,7 @@ public class PurchaseHistoryRequestProducer {
   }
 
   public String getRequestURI() {
-    return requestHandler.getRequestURI().toString();
+    return requestHandler.getRequestURI();
   }
 
   private void waitBeforeRequest(Duration delay) {

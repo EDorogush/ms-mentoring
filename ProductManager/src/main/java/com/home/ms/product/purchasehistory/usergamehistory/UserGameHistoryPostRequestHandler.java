@@ -1,8 +1,8 @@
-package com.home.ms.shoppingcart.service.purchasehistory;
+package com.home.ms.product.purchasehistory.usergamehistory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.home.ms.shoppingcart.service.exception.SendRequestException;
+import com.home.ms.product.SendRequestException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,19 +18,17 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 @Service
-public class PurchaseHistoryPostRequestHandler
-    implements RequestHandler<Integer, PurchaseHistoryToPost> {
+public class UserGameHistoryPostRequestHandler
+    implements RequestHandler<Integer, UserGameItemToPost> {
   private static final Logger logger = LogManager.getLogger();
   private final HttpClient httpClient;
-  private final URI baseUri;
+  private final String baseUri;
   private final ObjectMapper objectMapper;
 
-  public PurchaseHistoryPostRequestHandler(
-      HttpClient httpClient,
-      @Value("${purchase-history-app.url}") String baseUrl,
-      ObjectMapper objectMapper) {
+  public UserGameHistoryPostRequestHandler(
+      HttpClient httpClient, @Value("${game-app.url}") String baseUrl, ObjectMapper objectMapper) {
     this.httpClient = httpClient;
-    this.baseUri = URI.create(baseUrl);
+    this.baseUri = baseUrl;
     this.objectMapper = objectMapper;
   }
 
@@ -57,19 +55,21 @@ public class PurchaseHistoryPostRequestHandler
   }
 
   @Override
-  public HttpRequest prepareRequest(PurchaseHistoryToPost dataToPost) {
-    return HttpRequest.newBuilder(baseUri)
+  public HttpRequest prepareRequest(UserGameItemToPost dataToPost) {
+
+    URI uri = URI.create(baseUri + dataToPost.getGameId());
+    return HttpRequest.newBuilder(uri)
         .header("Content-Type", "application/json")
         .POST(HttpRequest.BodyPublishers.ofString(convertDataToJson(dataToPost)))
         .build();
   }
 
   @Override
-  public URI getRequestURI() {
+  public String getRequestURI() {
     return baseUri;
   }
 
-  private String convertDataToJson(PurchaseHistoryToPost postData) {
+  private String convertDataToJson(UserGameItemToPost postData) {
     try {
       return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(postData);
     } catch (JsonProcessingException e) {

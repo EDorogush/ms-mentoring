@@ -1,15 +1,23 @@
-package com.home.ms.shoppingcart.service.purchasehistory;
+package com.home.ms.product.purchasehistory;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
-public class PurchaseHistoryToPost {
+public class PurchaseHistoryItemToPost {
   private final String userId;
   private final String gameId;
   private final Instant date;
   private final BigDecimal cost;
 
-  public PurchaseHistoryToPost(String userId, String gameId, Instant date, BigDecimal cost) {
+  @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+  public PurchaseHistoryItemToPost(
+      @JsonProperty("userId") String userId,
+      @JsonProperty("gameId") String gameId,
+      @JsonProperty("date") Instant date,
+      @JsonProperty("cost") BigDecimal cost) {
     this.userId = userId;
     this.gameId = gameId;
     this.date = date;

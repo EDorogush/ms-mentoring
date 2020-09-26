@@ -24,9 +24,8 @@ public class PurchaseHistoryController {
   }
 
   @PostMapping
-  public PurchaseHistoryItem addToPurchased(@RequestBody PurchaseHistoryItem item) {
-    final String userId = getUserId(null);
-    return service.addItem(item, userId);
+  public PurchaseHistoryItem addToPurchased(@RequestBody PurchaseHistoryItemToPost item) {
+    return service.addItem(item);
   }
 
   @RequestMapping("/games")

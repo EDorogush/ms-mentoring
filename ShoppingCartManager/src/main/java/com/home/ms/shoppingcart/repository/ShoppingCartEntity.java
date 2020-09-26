@@ -19,7 +19,11 @@ public class ShoppingCartEntity {
   @Enumerated(EnumType.STRING)
   private ShoppingCartStatus status;
 
-  @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(
+      mappedBy = "userId",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true,
+      fetch = FetchType.EAGER)
   private List<ShoppingCartEntityElement> elements;
 
   public String getUserId() {

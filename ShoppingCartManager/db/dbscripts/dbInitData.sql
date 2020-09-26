@@ -2,7 +2,7 @@ SET CLIENT_ENCODING TO 'utf8';
 
 INSERT INTO shoppingcarts(user_id, status)
 SELECT  'user_id-' || seq AS user_id,
-        'OPEN' || seq AS status
+        'OPEN'  AS status
 FROM GENERATE_SERIES(1, 10) seq;
 
 

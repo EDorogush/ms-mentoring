@@ -4,9 +4,11 @@ import com.home.ms.shoppingcart.repository.ShoppingCartEntity;
 import com.home.ms.shoppingcart.repository.ShoppingCartEntityElement;
 import com.home.ms.shoppingcart.web.ShoppingCart;
 import com.home.ms.shoppingcart.web.ShoppingCartElement;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class ShoppingCartMapper {
 
   ShoppingCart fromEntity(ShoppingCartEntity entity) {
@@ -28,6 +30,7 @@ public class ShoppingCartMapper {
     ShoppingCartElement itemElement = new ShoppingCartElement();
     itemElement.setGameId(entityElement.getGameId());
     itemElement.setPrice(entityElement.getPrice());
+
     return itemElement;
   }
 }

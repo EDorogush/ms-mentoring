@@ -50,6 +50,7 @@ public class InvoiceService {
     InvoiceEntity entity = invoiceToPayMapper.toEntity(invoice);
     entity.setId(idGenerator.generateRandomUUID());
     entity.setLastUpdate(Instant.now());
+    entity.setStatus(InvoiceEntityStatus.WAIT);
     repository.saveAndFlush(entity);
     return entity.getId();
   }

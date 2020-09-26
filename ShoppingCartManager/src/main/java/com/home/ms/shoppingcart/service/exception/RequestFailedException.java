@@ -1,4 +1,4 @@
-package com.home.ms.product;
+package com.home.ms.shoppingcart.service.exception;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;

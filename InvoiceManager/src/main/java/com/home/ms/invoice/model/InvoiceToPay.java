@@ -1,5 +1,8 @@
 package com.home.ms.invoice.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.math.BigDecimal;
 import java.util.Objects;
 
@@ -8,7 +11,8 @@ public class InvoiceToPay {
   private final String userId;
   private final BigDecimal bill;
 
-  public InvoiceToPay(String userId, BigDecimal invoice) {
+  @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+  public InvoiceToPay(@JsonProperty("userId") String userId, @JsonProperty("invoice") BigDecimal invoice) {
     this.userId = userId;
     this.bill = invoice;
   }

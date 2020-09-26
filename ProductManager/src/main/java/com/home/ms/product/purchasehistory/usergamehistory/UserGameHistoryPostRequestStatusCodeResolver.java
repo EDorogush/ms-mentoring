@@ -1,4 +1,4 @@
-package com.home.ms.shoppingcart.service.purchasehistory;
+package com.home.ms.product.purchasehistory.usergamehistory;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class PurchaseHistoryPostRequestStatusCodeResolver
+public class UserGameHistoryPostRequestStatusCodeResolver
     implements HttpRequestResultStatusCodeResolver {
 
   private static final Logger logger = LogManager.getLogger();
@@ -49,11 +49,11 @@ public class PurchaseHistoryPostRequestStatusCodeResolver
       case 500:
       case 404:
         logger.error(MessageFormat.format(RETRY_MESSAGE_PATTERN, statusCode));
-        // todo: duration value configure from application.yaml
         return Duration.ofSeconds(2);
       case 400:
       case 403:
       case 200:
+      case 201:
       case 204:
         return Duration.ZERO;
       default:
