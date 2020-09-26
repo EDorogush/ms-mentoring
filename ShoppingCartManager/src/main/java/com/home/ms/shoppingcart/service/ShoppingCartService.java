@@ -91,9 +91,20 @@ public class ShoppingCartService {
     repository.saveAndFlush(entity);
   }
 
+  /**
+   * this method should be called to start invoice processing. during method shopping cart's status
+   * is updated to {@code ShoppingCartStatus.INVOICE}, invoice bill is summed up and sent to
+   * invoiceManager by {@link MessageBrokerMessageProducer#sendMessage}. After sending message
+   * current shoppingCart is in {@code ShoppingCartStatus.INVOICE} status or {@code
+   * ShoppingCartStatus.OPEN} if sending invoice failed. To see invoice's result processing see
+   * {@link com.home.ms.shoppingcart.service.invoice.InvoiceConsumer}
+   *
+   * @param userId userId whose shopping cart is processed
+   */
   public void updateStateWithStatusInvoice(String userId) {
     ShoppingCartEntity entity = repository.findById(userId).orElseThrow();
     entity.setStatus(ShoppingCartStatus.INVOICE);
+    // need to save to database to lock shopping cart
     repository.saveAndFlush(entity);
 
     BigDecimal invoice =
@@ -104,7 +115,9 @@ public class ShoppingCartService {
     try {
       invoiceProducer.sendMessage(invoiceItem);
     } catch (SendRequestException e) {
-      logger.error(e);
+      // unlock shopping cart
+      entity.setStatus(ShoppingCartStatus.OPEN);
+      throw e;
     }
   }
 
